@@ -3,6 +3,7 @@ import com.skillflow.skillflowbackend.model.enume.RoleType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -31,9 +32,10 @@ public class User {
     private String profilePicture;
     private LocalDateTime tokenToForgotPasswordCreationDate;
     private LocalDateTime validateCodeCreationDate;
-    private Date createdAt;
-    private Date updatedAt;
-    private RoleType roleType;
+    private Instant createdAt;
+    private Instant updatedAt;
+    @Enumerated(EnumType.STRING)
+    private RoleType roleTypes;
 
 
     @OneToMany(mappedBy = "admin")
