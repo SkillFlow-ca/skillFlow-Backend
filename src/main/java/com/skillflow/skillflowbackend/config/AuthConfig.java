@@ -47,10 +47,10 @@ public class AuthConfig {
                                 "/api/v1/auth/user/register",
                                 "/api/v1/auth/admin/register",
                                 "/api/v1/auth/logout",
+                                "/api/v1/auth/getUsers",
                                 "/api/v1/auth/resetPassword/**",
                                 "/api/v1/auth/token",
                                 "/api/v1/auth/forgotPassword",
-                                "/api/v1/auth/getUsers",
                                 "/api/v1/auth/register",
                                 "/api/v1/auth/validateAccount/**",
                                 "/user-service/v3/api-docs/**", "/actuator/health")
@@ -61,9 +61,11 @@ public class AuthConfig {
         // To swagger authorization
         http.cors(cors -> cors.configurationSource(request -> {
             CorsConfiguration configuration = new CorsConfiguration();
-            configuration.setAllowedOrigins(Arrays.asList("*"));
+            configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200")); // Specify the frontend origin
             configuration.setAllowedMethods(Arrays.asList("*"));
-            configuration.setAllowedHeaders(Arrays.asList("*"));
+            configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+            configuration.setAllowCredentials(true);
+
             return configuration;
         }));
         return http.build();

@@ -1,6 +1,8 @@
 package com.skillflow.skillflowbackend.dto;
 
 import com.skillflow.skillflowbackend.model.enume.RoleType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Lob;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -30,7 +32,9 @@ public class UserDTO {
     private String email;
     private String phone;
     private Instant createdAt;
-    private String profilePicture;
+    @Column(length = 10000000)
+    @Lob
+    private byte[] profilePicture;
     private Boolean isValidated;
     @NotNull(message = "Invalid role type: roleType is NULL")
     private RoleType roleTypes;

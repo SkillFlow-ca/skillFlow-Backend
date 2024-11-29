@@ -13,16 +13,17 @@ import com.skillflow.skillflowbackend.utility.ResponseUtil;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,6 +42,9 @@ public class UserService implements UserIService {
     @Autowired
     private ResponseUtil responseUtil;
 
+    @Autowired
+    private SessionService sessionService;
+
     private Random random = new Random();
     @Override
     public UserDTO createUserAccount(UserRegisterDTO userRegisterDTO) throws MessagingException {
@@ -50,6 +54,21 @@ public class UserService implements UserIService {
         }
         userRegisterDTO.setRoleTypes(RoleType.USER);
         return createAccount(userRegisterDTO,RoleType.USER);
+    }
+
+    @Override
+    public User updateUserToAddImage(MultipartFile img) throws IOException {
+        Optional<User> userOptional = userRepository.findUserByEmail(sessionService.getUserBySession().orElseThrow(
+                () -> new IllegalStateException("No user found in the current session.")
+        ).getEmail());
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setProfilePicture(img.getBytes());
+            return userRepository.save(user); // Save and return updated user
+        } else {
+            throw new NoSuchElementException("User not found with the given email.");
+        }
     }
 
     @Override
@@ -158,6 +177,26 @@ public class UserService implements UserIService {
         userRepository.save(user);
         return responseUtil.createResponse("Password Updated", "SUCCESS", "Your password successfully updated.");
     }
+
+    @Override
+    public ResponseModel<UserDTO>  getUsers(Pageable pageable) {
+        Page<User> users=userRepository.findUsers(pageable);
+        return buildResponse(users);
+    }
+
+    @Override
+    public User getUserBySession() {
+        User user=sessionService.getUserBySession().get();
+        return user;
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        User user=userRepository.findById(id).orElseThrow(()->new UserServiceCustomException("No user found with this id: "+id,"USER_NOT_FOUND"));
+        user.setIsDeleted(true);
+        userRepository.save(user);
+    }
+
     private boolean isTokenExpired(final LocalDateTime tokenCreationDate) {
         LocalDateTime now = LocalDateTime.now();
         Duration diff = Duration.between(tokenCreationDate, now);

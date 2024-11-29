@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.skillflow.skillflowbackend.exception.CustomError;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -52,9 +53,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain filterChain)
             throws ServletException, IOException {
         String authorizationHeader = request.getHeader("Authorization");
+        System.out.println("Authorization Header: " + request.getHeader("Authorization"));
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String token = authorizationHeader.replace("Bearer ", "");
+            log.debug("Token received: {}", token);
 
             try {
                 Jws<Claims> claimsJws = Jwts.parserBuilder().setSigningKey(getSigningKey()).build()
@@ -86,6 +89,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 setErrorException(response, HttpStatus.FORBIDDEN, "Access token has expired !");
                 return;
             }
+            catch (Exception e) {
+                log.warn("Something wrong in the access token");
+                // Handle invalid token exception
+                SecurityContextHolder.clearContext();
+                setErrorException(response, HttpStatus.UNAUTHORIZED, "Something wrong in the access token");
+                return;}
         }
         filterChain.doFilter(request, response);
     }

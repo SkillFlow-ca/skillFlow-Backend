@@ -29,7 +29,9 @@ public class User {
     private Boolean isDeleted;
     private Long tokenToValidate;
     private Long tokenToForgotPassword;
-    private String profilePicture;
+    @Column(length = 10000000)
+    @Lob
+    private byte[] profilePicture;
     private LocalDateTime tokenToForgotPasswordCreationDate;
     private LocalDateTime validateCodeCreationDate;
     private Instant createdAt;
