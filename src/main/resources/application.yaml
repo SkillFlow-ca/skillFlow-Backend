@@ -9,3 +9,26 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: workbottn@gmail.com
+    password: cufzgbpnihwgbllr
+    properties:
+      mail:
+        smtp:
+          auth: true
+        starttls:
+          enable: true
+token:
+  secret:
+    key: 81456854c2075418d28e0d3d17b30ad5e53a7b9fd6a86ba1202522bc23b9be7a730693ca383d51f9c166bb67f60706599809d4d0e0abea6dbc6538659827daf4e8299e1d7fa0178e76b47eb914413ae81e8b3f82c663edf3fc86dddd04af032eaa1b26925d51a2b9172567ca172ce8770dd64ad0d9654ee32ff8754c2ebb3781
+super:
+  user:
+    mail: mohsen.fennira@esprit.tn
+
+retry:
+  config:
+    maxAttempts: 3
+    backoffDelay: 3000
