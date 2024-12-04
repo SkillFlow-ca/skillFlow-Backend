@@ -3,6 +3,7 @@ import com.skillflow.skillflowbackend.model.enume.StatusBlog;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -18,14 +19,20 @@ public class Blog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private long idBlog;
-
+    @Column(length = 1000)
     private String title;
+    @Lob
+    @Column(length = 10000000)
     private String content;
-    private Date createdAt;
-    private Date updatedAt;
+    private Instant createdAt;
+    private Instant updatedAt;
+    private Boolean isDeleted;
     @Enumerated(EnumType.STRING)
     private StatusBlog statusBlog; // Enum: APPROVED, PENDING, REFUSED
     private boolean isAiGenerated;
+    @Column(length = 90000000)
+    @Lob
+    private byte[] blogPicture;
     @ManyToOne
     private User admin;
 

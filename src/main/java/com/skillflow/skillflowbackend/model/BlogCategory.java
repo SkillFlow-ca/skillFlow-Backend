@@ -1,4 +1,5 @@
 package com.skillflow.skillflowbackend.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,6 +22,7 @@ public class BlogCategory {
     private String description;
     private Instant createdAt;
     private Instant updatedAt;
+    @JsonIgnore
     @ManyToMany(mappedBy = "blogCategoryList")
     private List<Blog> blogList;
 }
