@@ -46,21 +46,28 @@ public class BlogService implements BlogIService {
         List<BlogCategory> blogCategoryList= (List<BlogCategory>) blogCategoryRepository.findAll();
         Random random = new Random();
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 1; i++) {
             Blog blog = new Blog();
             BlogCategory category = blogCategoryList.get(random.nextInt(blogCategoryList.size()));
             PromptTemplate promptTemplate = new PromptTemplate("Create a blog about " + category.getDescription());
             Prompt prompt = promptTemplate.create();
             ChatResponse response = chatModel.call(prompt);
             String content = response.getResult().getOutput().getContent();
-            String title = content.split("\\.")[0]; // Extract the first sentence as the title
-            blog.setContent(content);
+            String title = content.split("\\.")[0].replace("Title: ", "").replace("**", "").replace("##", "").replace("###", "").trim();            blog.setContent(content);
+            String shortParagraph = content.split("\\.")[1].trim();
             blog.setTitle(title);
+            blog.setShortParagraph(shortParagraph);
             blog.setAiGenerated(true);
             blog.setCreatedAt(Instant.now());
             blog.setBlogCategoryList(List.of(category));
             blog.setStatusBlog(StatusBlog.PENDING);
             blog.setIsDeleted(false);
+            // Generate tags based on the content
+            PromptTemplate tagPromptTemplate = new PromptTemplate("Generate SEO 5 tags for the following content: " + content);
+            Prompt tagPrompt = tagPromptTemplate.create();
+            ChatResponse tagResponse = chatModel.call(tagPrompt);
+            String tagsContent = tagResponse.getResult().getOutput().getContent();
+            blog.setTags(tagsContent);
             // Generate image based on blog content
             byte[] image = getImageAboutBlog(title);
             blog.setBlogPicture(image);
@@ -69,7 +76,14 @@ public class BlogService implements BlogIService {
         }
         return blogs;
     }
-
+    private String generateTags(String content) {
+        // Simple example: split content into words and use the first 5 unique words as tags
+        List<String> tagsList = Arrays.stream(content.split("\\W+"))
+                .distinct()
+                .limit(5)
+                .collect(Collectors.toList());
+        return String.join(",", tagsList);
+    }
     @Override
     public Blog getBlogById(long idBlog) {
         return blogRepository.findById(idBlog).orElse(null);

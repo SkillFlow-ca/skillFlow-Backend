@@ -53,6 +53,8 @@ public class AuthConfig {
                                 "/api/v1/auth/forgotPassword",
                                 "/api/v1/auth/register",
                                 "/api/v1/auth/validateAccount/**",
+                                "/api/v1/blog/getAllBlogBySatusAndOrderedByCreatedAt",
+                                "/api/v1/blog/get",
                                 "/user-service/v3/api-docs/**", "/actuator/health")
                         .permitAll().anyRequest()
                         .authenticated())

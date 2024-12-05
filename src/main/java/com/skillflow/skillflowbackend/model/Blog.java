@@ -24,6 +24,9 @@ public class Blog {
     @Lob
     @Column(length = 10000000)
     private String content;
+    @Column(length = 1000)
+    private String shortParagraph;
+    private String tags;
     private Instant createdAt;
     private Instant updatedAt;
     private Boolean isDeleted;
