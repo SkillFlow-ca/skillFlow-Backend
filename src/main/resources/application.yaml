@@ -2,14 +2,19 @@ server:
   port: 8085
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/skillFlowDataBase
+    url: jdbc:mysql://localhost:3306/skillFlowDataBase?maxAllowedPacket=16777216
     username: root
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
-
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  ai:
+    openai:
+      api-key: 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
   mail:
     host: smtp.gmail.com
     port: 587
@@ -24,6 +29,9 @@ spring:
 token:
   secret:
     key: 81456854c2075418d28e0d3d17b30ad5e53a7b9fd6a86ba1202522bc23b9be7a730693ca383d51f9c166bb67f60706599809d4d0e0abea6dbc6538659827daf4e8299e1d7fa0178e76b47eb914413ae81e8b3f82c663edf3fc86dddd04af032eaa1b26925d51a2b9172567ca172ce8770dd64ad0d9654ee32ff8754c2ebb3781
+    embedding:
+      options:
+        model: text-embedding-3-small
 super:
   user:
     mail: mohsen.fennira@esprit.tn
