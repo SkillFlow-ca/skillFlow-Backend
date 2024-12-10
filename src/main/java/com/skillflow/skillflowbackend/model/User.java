@@ -1,4 +1,5 @@
 package com.skillflow.skillflowbackend.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.skillflow.skillflowbackend.model.enume.RoleType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -53,4 +54,10 @@ public class User {
     private List<Enrollment> enrollmentList;
     @OneToMany(mappedBy = "user")
     private List<StudentLessonProgress> studentLessonProgressList;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Question> questionList;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Answer> answerList;
 }
