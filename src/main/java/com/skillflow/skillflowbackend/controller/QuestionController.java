@@ -57,4 +57,12 @@ public class QuestionController {
     public int countQuesions() {
         return questionIService.countQuesions();
     }
+    @GetMapping("getMyQuestionById")
+    public Question getMyQuestionById(@RequestParam long idQuestion) {
+        return questionIService.getMyQuestionById(idQuestion);
+    }
+    @PutMapping("updateStatusQuestion")
+    public Question updateStatusQuestion(@RequestParam long idQuestion, @RequestParam QuestionStatus questionStatus) {
+        return questionIService.updateStatusQuestion(idQuestion, questionStatus);
+    }
     }

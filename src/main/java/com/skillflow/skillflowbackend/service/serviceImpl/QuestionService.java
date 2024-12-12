@@ -53,6 +53,8 @@ public class QuestionService implements QuestionIService {
         question1.setWhatUTried(question.getWhatUTried());
         question1.setTags(question.getTags());
         question1.setUpdatedAt(Instant.now());
+        question1.setAnswerList(question.getAnswerList());
+        question1.setUpdatedAt(Instant.now());
         return questionRepository.save(question1);
     }
 
@@ -80,6 +82,21 @@ public class QuestionService implements QuestionIService {
         return buildResponse(questions);
     }
 
+    @Override
+    public Question getMyQuestionById(long idQuestion) {
+        User user = this.sessionService.getUserBySession().get();
+        return questionRepository.findById(idQuestion)
+                .filter(question -> question.getUser().getIdUser() == user.getIdUser())
+                .orElse(null);
+    }
+
+    @Override
+    public Question updateStatusQuestion(long idQuestion, QuestionStatus questionStatus) {
+        Question question = questionRepository.findById(idQuestion).orElseThrow(() -> new RuntimeException("Question not found"));
+        question.setQuestionStatus(questionStatus);
+        question.setUpdatedAt(Instant.now());
+        return questionRepository.save(question);
+    }
     private ResponseModel<Question> buildResponse(Page<Question> question) {
         List<Question> listQuestions = question.toList()
                 .stream()

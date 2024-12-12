@@ -32,4 +32,8 @@ public class AnswerController {
     public List<Answer> getAnswersByQuestionId(@RequestParam long idQuestion) {
         return answerIService.getAnswersByQuestionId(idQuestion);
     }
-}
+    @PutMapping("updateAnswerToUpdateTheVote")
+    public Answer updateAnswerToAddAvote(@RequestParam long idAnswer,@RequestParam String vote) {
+        return answerIService.updateAnswerToAddAvote(idAnswer, vote);
+    }
+    }

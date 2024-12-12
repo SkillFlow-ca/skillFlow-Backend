@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface AnswerRepository extends CrudRepository<Answer,Long> {
-    @Query("select a from Answer a where a.question.idQuestion = :v1 and a.isDeleted = false")
+    @Query("select a from Answer a where a.question.idQuestion = :v1 and a.isDeleted = false order by  a.votes desc")
     public List<Answer> getAnswersByQuestionId(@Param("v1") long idQuestion);
 }

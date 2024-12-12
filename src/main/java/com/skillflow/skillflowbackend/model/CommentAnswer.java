@@ -2,10 +2,10 @@ package com.skillflow.skillflowbackend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.time.Instant;
-import java.util.List;
 
 @Setter
 @Getter
@@ -15,25 +15,20 @@ import java.util.List;
 @EqualsAndHashCode
 @Builder
 @Entity
-public class Answer {
+public class CommentAnswer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private long idAnswer;
+    private long idComment;
     @Lob
     @Column(length = 10000000)
+    @NotBlank(message = "Invalid firstName: Empty firstName")
     private String content;
-    private int votes;
-    private Boolean isAccepted;
     private Instant createdAt;
     private Instant updatedAt;
     private Boolean isDeleted;
-    @JsonIgnore
-    @ManyToOne
-    private Question question;
     @ManyToOne
     private User user;
-    @OneToMany(mappedBy = "answer")
-    private List<Vote> voteList;
-    @OneToMany(mappedBy = "answer")
-    private List<CommentAnswer> commentAnswerList;
+    @JsonIgnore
+    @ManyToOne
+    private Answer answer;
 }

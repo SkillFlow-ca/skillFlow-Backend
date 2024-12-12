@@ -9,4 +9,6 @@ public interface AnswerIService {
     public Answer updateAnswer(Answer answer,long idAnswer);
     public Answer deleteAnswer(long idAnswer);
     public List<Answer> getAnswersByQuestionId(long idQuestion);
+    public Answer updateAnswerToAddAvote(long idAnswer,String vote);
+
 }

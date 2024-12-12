@@ -6,7 +6,6 @@ import lombok.*;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Setter
@@ -60,4 +59,10 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Answer> answerList;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Vote> voteList;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<CommentAnswer> commentAnswerList;
 }

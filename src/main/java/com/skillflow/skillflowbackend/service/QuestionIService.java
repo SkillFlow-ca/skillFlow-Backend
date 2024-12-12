@@ -15,4 +15,7 @@ public interface QuestionIService {
     public Question getQuestionById(long idQuestion);
     public int countQuesions();
     public ResponseModel<Question> getQuestionByContraintes(QuestionStatus questionStatus, String title, Integer views, Pageable pageable);
+    public Question getMyQuestionById(long idQuestion);
+    public Question updateStatusQuestion(long idQuestion, QuestionStatus questionStatus);
+
 }

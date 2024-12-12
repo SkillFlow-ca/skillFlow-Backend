@@ -26,6 +26,8 @@ public class QuestionSpecification {
                     : criteriaBuilder.conjunction();
             Predicate isDeletedPredicate = criteriaBuilder.isFalse(root.get("isDeleted"));
 
+            query.orderBy(criteriaBuilder.desc(root.get("createdAt")));
+
             return criteriaBuilder.and(statusPredicate, titlePredicate, viewsPredicate,isDeletedPredicate);
         };
     }
