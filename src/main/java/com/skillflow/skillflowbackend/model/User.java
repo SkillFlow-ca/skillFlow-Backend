@@ -1,11 +1,11 @@
 package com.skillflow.skillflowbackend.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.skillflow.skillflowbackend.model.enume.RoleType;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Setter
@@ -53,4 +53,16 @@ public class User {
     private List<Enrollment> enrollmentList;
     @OneToMany(mappedBy = "user")
     private List<StudentLessonProgress> studentLessonProgressList;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Question> questionList;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Answer> answerList;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Vote> voteList;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<CommentAnswer> commentAnswerList;
 }
