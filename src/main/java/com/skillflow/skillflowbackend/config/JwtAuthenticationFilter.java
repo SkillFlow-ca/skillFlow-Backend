@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.List;
 
 import com.skillflow.skillflowbackend.exception.CustomError;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -40,9 +42,8 @@ import lombok.extern.slf4j.Slf4j;
 
 @Component
 @RequiredArgsConstructor
-@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
+    private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
     @Value("${token.secret.key}")
     private String jwtSecretKey;
 

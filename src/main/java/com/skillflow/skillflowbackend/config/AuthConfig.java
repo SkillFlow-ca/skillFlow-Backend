@@ -23,11 +23,12 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-@RequiredArgsConstructor
 public class AuthConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-
+    public AuthConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    }
     @Bean
     public AuthenticationManager autenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
@@ -55,6 +56,10 @@ public class AuthConfig {
                                 "/api/v1/auth/validateAccount/**",
                                 "/api/v1/blog/getAllBlogBySatusAndOrderedByCreatedAt",
                                 "/api/v1/blog/get",
+                                "/api/v1/question/getQuestionById",
+                                "/api/v1/question/countQuesions",
+                                "/api/v1/question/getQuestionByContraintes",
+                                "/api/v1/answer/getAnswersByQuestionId",
                                 "/user-service/v3/api-docs/**", "/actuator/health")
                         .permitAll().anyRequest()
                         .authenticated())
@@ -63,7 +68,7 @@ public class AuthConfig {
         // To swagger authorization
         http.cors(cors -> cors.configurationSource(request -> {
             CorsConfiguration configuration = new CorsConfiguration();
-            configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200")); // Specify the frontend origin
+            configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200","http://myawsskillfront.s3-website.ca-central-1.amazonaws.com")); // Specify the frontend origin
             configuration.setAllowedMethods(Arrays.asList("*"));
             configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
             configuration.setAllowCredentials(true);
