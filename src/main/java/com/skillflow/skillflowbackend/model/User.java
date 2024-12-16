@@ -65,4 +65,7 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<CommentAnswer> commentAnswerList;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Job> jobList;
 }
