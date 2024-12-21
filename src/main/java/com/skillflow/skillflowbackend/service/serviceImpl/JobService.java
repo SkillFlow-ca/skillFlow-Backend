@@ -2,6 +2,7 @@ package com.skillflow.skillflowbackend.service.serviceImpl;
 
 import com.skillflow.skillflowbackend.dto.ResponseModel;
 import com.skillflow.skillflowbackend.model.Job;
+import com.skillflow.skillflowbackend.model.enume.JobType;
 import com.skillflow.skillflowbackend.model.enume.SourceJob;
 import com.skillflow.skillflowbackend.repository.JobRepository;
 import com.skillflow.skillflowbackend.service.JobIService;
@@ -28,6 +29,7 @@ public class JobService implements JobIService {
         job.setCreatedAt(Instant.now());
         job.setSourceJob(SourceJob.MANUAL);
         job.setUser(sessionService.getUserBySession().get());
+        job.setIsDeleted(false);
         return jobRepository.save(job);
     }
 
@@ -62,8 +64,8 @@ public class JobService implements JobIService {
     }
 
     @Override
-    public ResponseModel<Job> getJobsAdminByContraints(String title,SourceJob sourceJob, String companyName,String keyword, Pageable pageable) {
-        final Specification<Job> specification= JobSpecification.searchJobByManyConditions(title,sourceJob,companyName,keyword);
+    public ResponseModel<Job> getJobsAdminByContraints(String title, SourceJob sourceJob, String companyName, String keyword, JobType type, Pageable pageable) {
+        final Specification<Job> specification= JobSpecification.searchJobByManyConditions(title,sourceJob,companyName,keyword,type);
         Page<Job> jobs = jobRepository.findAll(specification, pageable);
         return buildResponse(jobs);
     }

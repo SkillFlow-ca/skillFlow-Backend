@@ -3,6 +3,7 @@ package com.skillflow.skillflowbackend.controller;
 import com.skillflow.skillflowbackend.dto.ResponseModel;
 import com.skillflow.skillflowbackend.model.Job;
 import com.skillflow.skillflowbackend.model.Question;
+import com.skillflow.skillflowbackend.model.enume.JobType;
 import com.skillflow.skillflowbackend.model.enume.SourceJob;
 import com.skillflow.skillflowbackend.service.JobIService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,10 +42,11 @@ public class JobController {
             @RequestParam(required = false) SourceJob sourceJob,
             @RequestParam(required = false) String companyName,
             @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) JobType type,
             @RequestParam(required = false,defaultValue="1")int pageNo,
             @RequestParam(required = false,defaultValue="10")int size) {
         Pageable pageRequestData = PageRequest.of(pageNo - 1, size);
-        ResponseModel<Job> jobs= jobIService.getJobsAdminByContraints(title,sourceJob,companyName,keyword,pageRequestData);
+        ResponseModel<Job> jobs= jobIService.getJobsAdminByContraints(title,sourceJob,companyName,keyword,type,pageRequestData);
         return jobs;
     }
 }

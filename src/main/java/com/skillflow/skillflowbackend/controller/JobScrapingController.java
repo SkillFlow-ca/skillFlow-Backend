@@ -23,4 +23,8 @@ public class JobScrapingController {
     public List<Job> scrapeJobs(){
         return jobScrapingIService.scrapeJobs();
     }
+    @GetMapping("getUSA")
+    public List<Job> scrapeJobUSA(){
+        return jobScrapingIService.scrapeJobUSA();
+    }
 }

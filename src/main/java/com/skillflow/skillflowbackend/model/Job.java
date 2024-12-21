@@ -23,15 +23,18 @@ public class Job {
     private long idJob;
 
     private String title;
-
+    @Lob
+    @Column(length = 10000000)
     private String description;
 
     private String companyName;
-
+    @Lob
+    @Column(length = 10000000)
     private String location;
 
     private String salary;
     public String keyword;
+    public String country;
 
     @Enumerated(EnumType.STRING)
     private JobType type; // FULL_TIME, PART_TIME, etc.
@@ -56,4 +59,7 @@ public class Job {
     @JsonIgnore
     @OneToMany(mappedBy = "job")
     private List<JobScraping> jobScrapingList;
+
+    @OneToMany(mappedBy = "job")
+    private List<Candidate> candidateList;
 }

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background-color: #007bff;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
+        .header h1 {
+            margin: 0;
+        }
+        .content {
+            padding: 20px;
+            line-height: 1.6;
+            color: #333333;
+        }
+        .content h2 {
+            color: #007bff;
+        }
+        .footer {
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+            color: #777777;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <div class="header">
+        <h1>Application Successful</h1>
+    </div>
+    <div class="content">
+        <h2>Hi [[${firstName}]] [[${lastName}]]</h2>
+        <p>Thank you for applying for the <strong>[[${jobTitle}]] </strong> position. We have successfully received your application.</p>
+        <p>Your tracking code is: <strong>[[${trackCode}]] </strong></p>
+        <p>You can track the status of your application using the link below:</p>
+        <a th:href="@{${trackLink}}" class="btn">Track Application</a>
+        <p>If you have any questions, feel free to reply to this email.</p>
+        <p>Best regards,</p>
+        <p>The Recruitment Team</p>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 Your Company Name. All rights reserved.</p>
+    </div>
+</div>
+</body>
+</html>
