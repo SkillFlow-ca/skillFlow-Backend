@@ -66,7 +66,23 @@ public class EmailUtility {
         helper.setText(html, true);
         javaMailSender.send(message);
     }
+    public void sendApplicationConfirmationEmail(String to, String firstName, String lastName, String trackCode, String jobTitle) throws MessagingException {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+        helper.setTo(to);
+        helper.setSubject("Application Successful");
 
+        Context context = new Context();
+        context.setVariable("firstName", firstName);
+        context.setVariable("lastName", lastName);
+        context.setVariable("trackCode", trackCode);
+        context.setVariable("jobTitle", jobTitle);
+        context.setVariable("trackLink", "http://localhost:4200/home/trackJob/" + trackCode);
+
+        String html = templateEngine.process("applicationConfirmationEmailTemplate", context);
+        helper.setText(html, true);
+        javaMailSender.send(message);
+    }
     @Recover
     public void recoverMovieDetails(Exception e, String to) throws UserServiceCustomException {
         // Log the error
