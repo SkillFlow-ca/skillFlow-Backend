@@ -1,8 +1,14 @@
-package com.skillflow.skillflowbackend.model;
+package com.skillflow.skillflowbackend.dto;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.skillflow.skillflowbackend.model.LessonRessource;
+import com.skillflow.skillflowbackend.model.Module;
+import com.skillflow.skillflowbackend.model.StudentLessonProgress;
 import com.skillflow.skillflowbackend.model.enume.TypeLesson;
-import jakarta.persistence.*;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Transient;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,20 +20,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@EqualsAndHashCode
-@Entity
-public class Lesson {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    private long idLesson;
-
+@Builder
+public class LessonDTO {
     private String title;
     private String content;
     private String duration;
     private String urlvideoLesson;
     private String urlPdfLesson;
-    private String titleVideo;
-    private String titlePdf;
     @Transient
     private MultipartFile videoFile;
 
@@ -37,7 +36,6 @@ public class Lesson {
     private Boolean isDeleted;
     private Instant createdAt;
     private Instant updatedAt;
-
     @JsonIgnore
     @ManyToOne
     private Module module;

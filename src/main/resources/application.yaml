@@ -1,6 +1,11 @@
 server:
   port: 8085
 spring:
+  servlet:
+    multipart:
+      max-file-size: 150MB       # Maximum size of a single uploaded file
+      max-request-size: 150MB
+      enabled: true
   datasource:
     url: jdbc:mysql://localhost:3306/skillFlowDataBase?maxAllowedPacket=16777216
     username: root
@@ -40,3 +45,10 @@ retry:
   config:
     maxAttempts: 3
     backoffDelay: 3000
+
+aws:
+  s3:
+    bucket: course-videos-skillflow
+    access-key: AKIA23WHTY2SJJ3MSWUR
+    secret-key: 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
+    region: ca-central-1

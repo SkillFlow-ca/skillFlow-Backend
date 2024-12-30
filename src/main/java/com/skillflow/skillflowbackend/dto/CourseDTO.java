@@ -1,4 +1,10 @@
-package com.skillflow.skillflowbackend.model;
+package com.skillflow.skillflowbackend.dto;
+
+import com.skillflow.skillflowbackend.model.CourseCategory;
+import com.skillflow.skillflowbackend.model.Enrollment;
+import com.skillflow.skillflowbackend.model.Module;
+import com.skillflow.skillflowbackend.model.Payment;
+import com.skillflow.skillflowbackend.model.User;
 import com.skillflow.skillflowbackend.model.enume.AudioLanguage;
 import com.skillflow.skillflowbackend.model.enume.CourseLevel;
 import com.skillflow.skillflowbackend.model.enume.CourseStatus;
@@ -7,7 +13,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 
 @Setter
@@ -15,13 +20,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@EqualsAndHashCode
 @Builder
-@Entity
-public class Course {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    private long idCourse;
+public class CourseDTO {
     private String title;
     private String thumbnailUrl;
     @Column(length = 1000)
@@ -75,5 +75,5 @@ public class Course {
     private List<CourseCategory> courseCategoryList;
 
     @OneToMany(mappedBy = "course")
-    private List<Module> moduleList;
+    private List<ModuleDTO> moduleList;
 }

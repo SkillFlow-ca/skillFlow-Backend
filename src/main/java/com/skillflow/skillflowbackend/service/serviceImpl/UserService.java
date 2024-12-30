@@ -82,6 +82,7 @@ public class UserService implements UserIService {
         user.setCreatedAt(Instant.now());
         user.setIsValidated(true);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoleTypes(userRegisterDTO.getRoleTypes());
         userRepository.save(user);
         return userMapper.mapToUserDto(user);
     }

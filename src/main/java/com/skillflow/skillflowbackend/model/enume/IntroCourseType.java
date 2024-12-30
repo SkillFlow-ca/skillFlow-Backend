@@ -1,5 +1,5 @@
 package com.skillflow.skillflowbackend.model.enume;
 
-public enum RoleType {
-    USER,ADMIN,INSTRUCTOR
+public enum IntroCourseType {
+    MP4,YouTube
 }
