@@ -21,7 +21,7 @@ public class Module {
     private String name;
     private Instant createdAt;
     private Instant updatedAt;
-
+    @JsonIgnore
     @ManyToOne
     private Course course;
     @OneToMany(mappedBy = "module")

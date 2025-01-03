@@ -1,4 +1,5 @@
 package com.skillflow.skillflowbackend.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.skillflow.skillflowbackend.model.enume.AudioLanguage;
 import com.skillflow.skillflowbackend.model.enume.CourseLevel;
 import com.skillflow.skillflowbackend.model.enume.CourseStatus;
@@ -6,6 +7,7 @@ import com.skillflow.skillflowbackend.model.enume.IntroCourseType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
@@ -18,10 +20,11 @@ import java.util.List;
 @EqualsAndHashCode
 @Builder
 @Entity
-public class Course {
+public class Course implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private long idCourse;
+    private String reference;
     private String title;
     private String thumbnailUrl;
     @Column(length = 1000)
@@ -63,10 +66,11 @@ public class Course {
 
     private Boolean isDeleted;
     private Boolean isPublished;
-
+    @JsonIgnore
     @ManyToOne
     private User admin;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "course")
     private Payment payment;
     @OneToOne(mappedBy = "course")

@@ -5,12 +5,8 @@ import com.skillflow.skillflowbackend.model.LessonRessource;
 import com.skillflow.skillflowbackend.model.Module;
 import com.skillflow.skillflowbackend.model.StudentLessonProgress;
 import com.skillflow.skillflowbackend.model.enume.TypeLesson;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
 import java.util.List;
@@ -22,13 +18,15 @@ import java.util.List;
 @ToString
 @Builder
 public class LessonDTO {
+    private long idLesson;
+    private String reference;
     private String title;
     private String content;
     private String duration;
     private String urlvideoLesson;
     private String urlPdfLesson;
-    @Transient
-    private MultipartFile videoFile;
+    private String titleVideo;
+    private String titlePdf;
 
     private TypeLesson typeLesson;
     private Boolean isPreview;
@@ -39,8 +37,8 @@ public class LessonDTO {
     @JsonIgnore
     @ManyToOne
     private Module module;
-    @OneToMany(mappedBy = "lesson")
+    @OneToMany(mappedBy = "lesson", fetch = FetchType.EAGER)
     private List<LessonRessource> lessonRessourceList;
-    @OneToOne(mappedBy = "lesson")
+    @OneToOne(mappedBy = "lesson", fetch = FetchType.EAGER)
     private StudentLessonProgress studentLessonProgress;
 }

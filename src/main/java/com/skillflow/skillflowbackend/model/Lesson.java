@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Builder
 @EqualsAndHashCode
 @Entity
 public class Lesson {
@@ -21,16 +22,17 @@ public class Lesson {
     @Id
     private long idLesson;
 
+    private String reference;
     private String title;
+    @Lob
+    @Column(length = 10000000)
     private String content;
     private String duration;
     private String urlvideoLesson;
     private String urlPdfLesson;
     private String titleVideo;
     private String titlePdf;
-    @Transient
-    private MultipartFile videoFile;
-
+    @Enumerated(EnumType.STRING)
     private TypeLesson typeLesson;
     private Boolean isPreview;
     private Boolean isPublished;
@@ -41,8 +43,10 @@ public class Lesson {
     @JsonIgnore
     @ManyToOne
     private Module module;
-    @OneToMany(mappedBy = "lesson")
+    @JsonIgnore
+    @OneToMany(mappedBy = "lesson", fetch = FetchType.EAGER)
     private List<LessonRessource> lessonRessourceList;
-    @OneToOne(mappedBy = "lesson")
+    @JsonIgnore
+    @OneToOne(mappedBy = "lesson", fetch = FetchType.EAGER)
     private StudentLessonProgress studentLessonProgress;
 }

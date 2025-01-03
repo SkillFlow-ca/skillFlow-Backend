@@ -1,13 +1,18 @@
 package com.skillflow.skillflowbackend.controller;
 
+import com.skillflow.skillflowbackend.dto.CourseDTO;
 import com.skillflow.skillflowbackend.model.Course;
 import com.skillflow.skillflowbackend.model.Module;
 import com.skillflow.skillflowbackend.service.CourseIService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Collections;
 import java.util.List;
 
 @CrossOrigin(origins = "**", maxAge = 3600)
@@ -18,13 +23,19 @@ public class CourseController {
     @Autowired
     private CourseIService courseIService;
 
-    @PostMapping("add")
-    public Course addCourse(@RequestBody Course course) {
-        return courseIService.addCourse(course);
+    @PostMapping(value = "/add")
+    public ResponseEntity<Course> addCourse(@Validated @RequestBody CourseDTO course) {
+            Course course1 = courseIService.addCourse(course);
+            return ResponseEntity.ok(course1);
     }
     @PostMapping("uploadvideo")
-    public Course uploadCourseVideo(@RequestParam("courseId") Long courseId,MultipartFile videoFile) {
-        return courseIService.uploadCourseVideo(courseId, videoFile);
+    public ResponseEntity<String> uploadCourseVideo(@RequestParam("courseId") Long courseId, MultipartFile videoFile) {
+        try {
+            courseIService.uploadCourseVideoAsync(courseId, videoFile); // Asynchronous upload
+            return ResponseEntity.accepted().body("Upload started successfully. The video will be processed shortly.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Upload failed.");
+        }
     }
     @PostMapping("uploadThumbnail")
     public Course uploadThumbnail(@RequestParam("courseId") Long courseId,MultipartFile thumbnail) {
@@ -33,5 +44,18 @@ public class CourseController {
     @DeleteMapping("delete")
     public void deleteDef(@RequestParam("courseId") Long courseId) {
         courseIService.deleteDef(courseId);
+    }
+
+    @GetMapping("GetCourse")
+        public Course getCourse(@RequestParam("courseId") Long courseId) {
+        return courseIService.getCourse(courseId);
+    }
+    @GetMapping("GetMyCourses")
+    public List<Course> getAllMyCourses() {
+        return courseIService.getAllMyCourses();
+    }
+    @PutMapping("updateStatus")
+    public void updateStatusOfCourse(@RequestParam("courseId") Long courseId, @RequestParam("status") String status) {
+        courseIService.updateStatusOfCourse(courseId, status);
     }
 }

@@ -1,4 +1,5 @@
 package com.skillflow.skillflowbackend.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.skillflow.skillflowbackend.model.enume.StatusENR;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,9 +24,10 @@ public class Enrollment {
     private float progress;
     private Date createdAt;
     private Date updatedAt;
-
+    @JsonIgnore
     @ManyToOne
     private User user;
+    @JsonIgnore
     @OneToOne
     private Course course;
 }
