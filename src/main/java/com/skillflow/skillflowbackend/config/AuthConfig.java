@@ -66,6 +66,10 @@ public class AuthConfig {
                                 "/api/v1/question/countQuesions",
                                 "/api/v1/question/getQuestionByContraintes",
                                 "/api/v1/answer/getAnswersByQuestionId",
+                                "/api/v1/course/getAllCourses",
+                                "/api/v1/course/GetCourse",
+
+                                "/api/v1/courseCategory/getAllNotDeleted",
                                 "/user-service/v3/api-docs/**", "/actuator/health")
                         .permitAll().anyRequest()
                         .authenticated())

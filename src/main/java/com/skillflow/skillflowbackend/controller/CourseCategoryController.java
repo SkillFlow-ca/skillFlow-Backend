@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin(origins = "**", maxAge = 3600)
 @RestController
 @RequestMapping("/api/v1/courseCategory/")
@@ -39,5 +41,10 @@ public class CourseCategoryController {
     @DeleteMapping("delete")
     public void deleteCourseCategory(@RequestParam Long id) {
         courseCategoryService.delCourseCategory(id);
+    }
+
+    @GetMapping("getAllNotDeleted")
+    public List<CourseCategory> getAllNotDeleted() {
+        return courseCategoryService.findAllCategoryNotDeleted();
     }
 }

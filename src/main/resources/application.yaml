@@ -19,7 +19,7 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
   ai:
     openai:
-      api-key: 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
+      api-key: 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
   mail:
     host: smtp.gmail.com
     port: 587
@@ -52,3 +52,8 @@ aws:
     access-key: AKIA23WHTY2SJJ3MSWUR
     secret-key: 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
     region: ca-central-1
+
+paypal:
+  clientId: AXMgZa6adLakjC3LFnS8VN8s9W9paSyLgm7fWXNgXdIM57Z34iNXb5qxP9SzZL1weUO2IKCeXJmG-4Kg
+  clientSecret: EGMrcWwoaSXKBVptu-moMCp8sEVgikm39WfIC_9AEsCjeLhT2w16yvXmfIGclLovKJwd48GJ7prJo0yo
+  mode: sandbox #Use sandbox for testing or live for production

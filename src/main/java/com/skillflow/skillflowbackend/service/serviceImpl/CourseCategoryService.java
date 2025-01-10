@@ -49,6 +49,12 @@ public class CourseCategoryService implements CourseCategoryIService {
         courseCategory.setIsDeleted(true);
         courseCategoryRepository.save(courseCategory);
     }
+
+    @Override
+    public List<CourseCategory> findAllCategoryNotDeleted() {
+        return courseCategoryRepository.findByCourseCategoryAndIsDeletedFalseOrderByCreatedAtDesc();
+    }
+
     private ResponseModel<CourseCategory> buildResponse(Page<CourseCategory> courseCategory) {
         List<CourseCategory> listCourseCategory = courseCategory.toList()
                 .stream()

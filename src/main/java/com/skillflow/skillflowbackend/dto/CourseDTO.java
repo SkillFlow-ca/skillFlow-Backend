@@ -2,8 +2,7 @@ package com.skillflow.skillflowbackend.dto;
 
 import com.skillflow.skillflowbackend.model.CourseCategory;
 import com.skillflow.skillflowbackend.model.Enrollment;
-import com.skillflow.skillflowbackend.model.Module;
-import com.skillflow.skillflowbackend.model.Payment;
+import com.skillflow.skillflowbackend.model.PaymentSkillFlow;
 import com.skillflow.skillflowbackend.model.User;
 import com.skillflow.skillflowbackend.model.enume.AudioLanguage;
 import com.skillflow.skillflowbackend.model.enume.CourseLevel;
@@ -78,7 +77,7 @@ public class CourseDTO {
     private User admin;
 
     @OneToOne(mappedBy = "course")
-    private Payment payment;
+    private PaymentSkillFlow paymentSkillFlow;
     @OneToOne(mappedBy = "course")
     private Enrollment enrollment;
     @ManyToMany

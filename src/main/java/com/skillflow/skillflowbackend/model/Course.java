@@ -6,6 +6,7 @@ import com.skillflow.skillflowbackend.model.enume.CourseStatus;
 import com.skillflow.skillflowbackend.model.enume.IntroCourseType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -69,15 +70,15 @@ public class Course implements Serializable {
     @JsonIgnore
     @ManyToOne
     private User admin;
-
     @JsonIgnore
-    @OneToOne(mappedBy = "course")
-    private Payment payment;
-    @OneToOne(mappedBy = "course")
-    private Enrollment enrollment;
+    @OneToMany(mappedBy = "course")
+    private List<Enrollment> enrollmentList;
     @ManyToMany
     private List<CourseCategory> courseCategoryList;
 
     @OneToMany(mappedBy = "course")
     private List<Module> moduleList;
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.REMOVE)
+    private List<Panier> panierList;
 }

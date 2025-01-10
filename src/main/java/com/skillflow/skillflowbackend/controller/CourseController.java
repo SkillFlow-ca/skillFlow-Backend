@@ -1,10 +1,15 @@
 package com.skillflow.skillflowbackend.controller;
 
 import com.skillflow.skillflowbackend.dto.CourseDTO;
+import com.skillflow.skillflowbackend.dto.ResponseModel;
+import com.skillflow.skillflowbackend.model.Blog;
 import com.skillflow.skillflowbackend.model.Course;
 import com.skillflow.skillflowbackend.model.Module;
+import com.skillflow.skillflowbackend.model.enume.StatusBlog;
 import com.skillflow.skillflowbackend.service.CourseIService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -57,5 +62,21 @@ public class CourseController {
     @PutMapping("updateStatus")
     public void updateStatusOfCourse(@RequestParam("courseId") Long courseId, @RequestParam("status") String status) {
         courseIService.updateStatusOfCourse(courseId, status);
+    }
+    @GetMapping("getAllCourses")
+    public ResponseModel<Course> getAllCourse(@RequestParam(required = false,defaultValue="1")int pageNo,
+                                          @RequestParam(required = false,defaultValue="10")int size) {
+        Pageable pageRequestData = PageRequest.of(pageNo - 1, size);
+        ResponseModel<Course> course= courseIService.getAllCourses(pageRequestData);
+        return course;
+    }
+    @PutMapping("Delete")
+    public void DeleteCourse(@RequestParam long courseID){
+        courseIService.DeleteCourse(courseID);
+    }
+
+    @GetMapping("GetCourseByCategoryName")
+    public List<Course> getCourseByCategoryName(@RequestParam String categoryName) {
+        return courseIService.getCourseByCategoryName(categoryName);
     }
 }

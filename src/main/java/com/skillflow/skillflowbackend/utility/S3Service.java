@@ -66,6 +66,19 @@ public class S3Service {
             throw new RuntimeException("Failed to upload file to S3", e);
         }
     }
+    public String uploadStreamPDF(InputStream inputStream, String fileName) {
+        try {
+            s3Client.putObject(PutObjectRequest.builder()
+                            .bucket(bucketName)
+                            .key(fileName)
+                            .contentType("application/pdf") // Set correct Content-Type for PDF
+                            .build(),
+                    RequestBody.fromInputStream(inputStream, inputStream.available()));
+            return "https://" + bucketName + ".s3.amazonaws.com/" + fileName;
+        } catch (S3Exception | IOException e) {
+            throw new RuntimeException("Failed to upload file to S3", e);
+        }
+    }
     public String uploadStream2(InputStream inputStream, String key) {
         AwsBasicCredentials credentials = AwsBasicCredentials.create("AKIA23WHTY2SJJ3MSWUR", "6xtwvBeRppE4ff/+cAIuAyGdQrkv5/cDuGudyzfJ");
         ProfileCredentialsProvider credentialsProvider = ProfileCredentialsProvider.create();

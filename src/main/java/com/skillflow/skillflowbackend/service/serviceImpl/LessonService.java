@@ -67,7 +67,18 @@ public class LessonService implements LessonIService {
                     } catch (IOException e) {
                         throw new RuntimeException("Failed to upload video for lesson", e);
                     }
-                } else {
+                }
+                else if(lesson.getTitlePdf()!= null){
+                    MultipartFile fileLesson = entry.getValue();
+                    try (InputStream inputStream = fileLesson.getInputStream()) {
+                        String pdfUrl = s3Service.uploadStreamPDF(inputStream, "lessonPDFAttachments/" + fileLesson.getOriginalFilename());
+                        lesson.setUrlPdfLesson(pdfUrl);
+                        lessonRepository.save(lesson);
+                    } catch (IOException e) {
+                        throw new RuntimeException("Failed to upload video for lesson", e);
+                    }
+                }
+                else {
                     System.out.println("Skipping lesson with no titleVideo for reference: " + lessonRef);
                 }
             }

@@ -4,10 +4,9 @@ import com.skillflow.skillflowbackend.dao.mapper.CourseMapper;
 import com.skillflow.skillflowbackend.dto.CourseDTO;
 import com.skillflow.skillflowbackend.dto.LessonDTO;
 import com.skillflow.skillflowbackend.dto.ModuleDTO;
-import com.skillflow.skillflowbackend.model.Course;
-import com.skillflow.skillflowbackend.model.Lesson;
+import com.skillflow.skillflowbackend.dto.ResponseModel;
+import com.skillflow.skillflowbackend.model.*;
 import com.skillflow.skillflowbackend.model.Module;
-import com.skillflow.skillflowbackend.model.User;
 import com.skillflow.skillflowbackend.model.enume.CourseStatus;
 import com.skillflow.skillflowbackend.model.enume.TypeLesson;
 import com.skillflow.skillflowbackend.repository.CourseRepository;
@@ -16,6 +15,8 @@ import com.skillflow.skillflowbackend.repository.ModuleRepository;
 import com.skillflow.skillflowbackend.service.CourseIService;
 import com.skillflow.skillflowbackend.utility.S3Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseService implements CourseIService {
@@ -75,7 +77,7 @@ public class CourseService implements CourseIService {
                     lesson.setUrlvideoLesson(null);
                     lesson.setTypeLesson(TypeLesson.MARKDOWN);
                 } else if (l.getTypeLesson().equals(TypeLesson.PDF)){
-                    lesson.setTitlePdf(l.getTitle());
+                    lesson.setTitlePdf(l.getTitlePdf());
                     lesson.setUrlvideoLesson(null);
                     lesson.setTypeLesson(TypeLesson.PDF);
                 }
@@ -148,9 +150,11 @@ public class CourseService implements CourseIService {
     }
 
     @Override
-    public List<Course> getAllCourses() {
-        return null;
+    public ResponseModel<Course> getAllCourses(Pageable pageable) {
+        Page<Course> courseList=courseRepository.findAll(pageable);
+        return buildResponse(courseList);
     }
+
 
     @Override
     public List<Course> getAllMyCourses() {
@@ -168,6 +172,33 @@ public class CourseService implements CourseIService {
     @Override
     public void deleteDef(Long courseId) {
         courseRepository.deleteById(courseId);
+    }
+
+    @Override
+    public void DeleteCourse(Long courseId) {
+        Course course=courseRepository.findById(courseId).get();
+        course.setIsDeleted(true);
+        courseRepository.save(course);
+    }
+
+    @Override
+    public List<Course> getCourseByCategoryName(String categoryName) {
+        return courseRepository.findByCategoryName(categoryName);
+    }
+
+
+    private ResponseModel<Course> buildResponse(Page<Course> course) {
+        List<Course> listcourse = course.toList()
+                .stream()
+                .collect(Collectors.toList());
+        return ResponseModel.<Course>builder()
+                .pageNo(course.getNumber())
+                .pageSize(course.getSize())
+                .totalElements(course.getTotalElements())
+                .totalPages(course.getTotalPages())
+                .data(listcourse)
+                .isLastPage(course.isLast())
+                .build();
     }
 
 }
