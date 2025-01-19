@@ -66,6 +66,14 @@ public class EmailUtility {
         helper.setText(html, true);
         javaMailSender.send(message);
     }
+    public void sendSimpleEmail(String to, String subject, String body) throws MessagingException {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+        helper.setTo(to);
+        helper.setSubject(subject);
+        helper.setText(body, false); // false indicates plain text
+        javaMailSender.send(message);
+    }
     public void sendApplicationConfirmationEmail(String to, String firstName, String lastName, String trackCode, String jobTitle) throws MessagingException {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);

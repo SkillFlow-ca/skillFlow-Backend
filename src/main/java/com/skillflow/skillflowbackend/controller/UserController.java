@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Map;
 
 
 @CrossOrigin(origins = "**", maxAge = 3600)
@@ -94,4 +95,13 @@ public class UserController {
         userIService.deleteUser(id);
     }
 
+    @GetMapping("/getStatisticsUsers")
+    public ResponseEntity<Map<String, Long>> getStatisticsUsers() {
+        return userIService.getStatisticsUsers();
+    }
+
+    @GetMapping("/findUserByCourseId")
+    public User findUserByCourseId(@RequestParam Long courseId) {
+        return userIService.findUserByCourseId(courseId);
+    }
     }

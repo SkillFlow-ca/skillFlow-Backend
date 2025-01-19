@@ -70,8 +70,8 @@ public class Course implements Serializable {
     @JsonIgnore
     @ManyToOne
     private User admin;
+    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
     @JsonIgnore
-    @OneToMany(mappedBy = "course")
     private List<Enrollment> enrollmentList;
     @ManyToMany
     private List<CourseCategory> courseCategoryList;

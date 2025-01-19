@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin(origins = "**", maxAge = 3600)
 @RestController
@@ -70,6 +71,13 @@ public class CourseController {
         ResponseModel<Course> course= courseIService.getAllCourses(pageRequestData);
         return course;
     }
+    @GetMapping("getPublishedCourses")
+    public ResponseModel<Course> getAllPublishCourse(@RequestParam(required = false,defaultValue="1")int pageNo,
+                                              @RequestParam(required = false,defaultValue="10")int size) {
+        Pageable pageRequestData = PageRequest.of(pageNo - 1, size);
+        ResponseModel<Course> course= courseIService.getPublishedCourses(pageRequestData);
+        return course;
+    }
     @PutMapping("Delete")
     public void DeleteCourse(@RequestParam long courseID){
         courseIService.DeleteCourse(courseID);
@@ -78,5 +86,17 @@ public class CourseController {
     @GetMapping("GetCourseByCategoryName")
     public List<Course> getCourseByCategoryName(@RequestParam String categoryName) {
         return courseIService.getCourseByCategoryName(categoryName);
+    }
+    @PutMapping("updateCourse")
+    public Course updateCourse(@Validated @RequestBody CourseDTO course, @RequestParam Long courseId) {
+        return courseIService.updateCourse(course, courseId);
+    }
+    @GetMapping("/getStatisticsAdminInstructor")
+    public ResponseEntity<Map<String, Long>> getStatisticsInstructor() {
+        return courseIService.getStatisticsCourses();
+    }
+    @GetMapping("/getStatisticsCoursesInstructor")
+    public ResponseEntity<Map<String, Long>> getStatisticsCoursesInstructor() {
+        return courseIService.getStatisticsCoursesInstructor();
     }
 }

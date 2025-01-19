@@ -16,6 +16,7 @@ import java.util.List;
 @ToString
 @Builder
 public class ModuleDTO {
+    private long idModule;
     private String name;
     private Instant createdAt;
     private Instant updatedAt;

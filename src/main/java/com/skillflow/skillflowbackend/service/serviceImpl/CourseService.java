@@ -17,6 +17,7 @@ import com.skillflow.skillflowbackend.utility.S3Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,9 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -71,6 +70,7 @@ public class CourseService implements CourseIService {
             for (LessonDTO l : module1.getLessonList()) {
                 Lesson lesson = new Lesson();
                 lesson.setCreatedAt(Instant.now());
+                lesson.setReference(UUID.randomUUID().toString());
                 if(l.getTypeLesson().equals(TypeLesson.MARKDOWN)){
                     lesson.setTitle(l.getTitle());
                     lesson.setContent(l.getContent());
@@ -92,6 +92,80 @@ public class CourseService implements CourseIService {
             }
         }
         return savedCourse;
+    }
+
+    @Override
+    @Transactional
+    public Course updateCourse(CourseDTO courseDTO, long idCourse) {
+        Course existingCourse = courseRepository.findById(idCourse)
+                .orElseThrow(() -> new RuntimeException("Course not found with id: " + idCourse));
+
+        existingCourse.setTitle(courseDTO.getTitle());
+        existingCourse.setLongDescription(courseDTO.getLongDescription());
+        existingCourse.setReference(courseDTO.getReference());
+        existingCourse.setShortDescription(courseDTO.getShortDescription());
+        existingCourse.setCourseCategoryList(courseDTO.getCourseCategoryList());
+        existingCourse.setIntroCourse(courseDTO.getIntroCourse());
+        existingCourse.setThumbnailUrl(courseDTO.getThumbnailUrl());
+        existingCourse.setIsDeleted(courseDTO.getIsDeleted());
+        existingCourse.setRequirements(courseDTO.getRequirements());
+        existingCourse.setWhatWillStudentLearn(courseDTO.getWhatWillStudentLearn());
+        existingCourse.setFree(courseDTO.isFree());
+        existingCourse.setAudioLanguage(courseDTO.getAudioLanguage());
+        existingCourse.setDiscountPrice(courseDTO.getDiscountPrice());
+        existingCourse.setRegularPrice(courseDTO.getRegularPrice());
+        existingCourse.setCourseStatus(courseDTO.getCourseStatus());
+        existingCourse.setAdmin(sessionService.getUserBySession().get());
+        existingCourse.setIntroCourseType(courseDTO.getIntroCourseType());
+        existingCourse.setIsPublished(courseDTO.getIsPublished());
+        existingCourse.setCreatedAt(courseDTO.getCreatedAt());
+        existingCourse.setUpdatedAt(Instant.now());
+
+        // Update modules
+        List<Module> existingModules = moduleRepository.findModuleByCourse_IdCourse(existingCourse.getIdCourse());
+        for (ModuleDTO moduleDTO : courseDTO.getModuleList()) {
+            Module module = existingModules.stream()
+                    .filter(m -> m.getIdModule()==(moduleDTO.getIdModule()))
+                    .findFirst()
+                    .orElse(new Module());
+            module.setName(moduleDTO.getName());
+            module.setCourse(existingCourse);
+            module.setCreatedAt(moduleDTO.getCreatedAt());
+            module.setUpdatedAt(Instant.now());
+            moduleRepository.save(module);
+
+            // Update lessons
+            List<Lesson> existingLessons = lessonRepository.findLessonByModule_IdModule(module.getIdModule());
+            for (LessonDTO lessonDTO : moduleDTO.getLessonList()) {
+                Lesson lesson = existingLessons.stream()
+                        .filter(l -> l.getIdLesson()==(lessonDTO.getIdLesson()))
+                        .findFirst()
+                        .orElse(new Lesson());
+                lesson.setUpdatedAt(Instant.now());
+                lesson.setCreatedAt(lesson.getCreatedAt());
+                if(lessonDTO.getTypeLesson().equals(TypeLesson.MARKDOWN)){
+                    lesson.setTitle(lessonDTO.getTitle());
+                    lesson.setContent(lessonDTO.getContent());
+                    lesson.setUrlvideoLesson(null);
+                    lesson.setTypeLesson(TypeLesson.MARKDOWN);
+                } else if (lessonDTO.getTypeLesson().equals(TypeLesson.PDF)){
+                    lesson.setTitlePdf(lessonDTO.getTitlePdf());
+                    lesson.setUrlvideoLesson(null);
+                    lesson.setTypeLesson(TypeLesson.PDF);
+                }
+                else {
+                    lesson.setTitleVideo(lessonDTO.getTitleVideo());
+                    lesson.setTypeLesson(TypeLesson.VIDEO);
+                    lesson.setDuration(lessonDTO.getDuration());
+                }
+                lesson.setModule(module);
+                lesson.setReference(lessonDTO.getReference());
+                lesson.setUpdatedAt(Instant.now());
+                lessonRepository.save(lesson);
+            }
+        }
+
+        return courseRepository.save(existingCourse);
     }
 
     @Override
@@ -124,7 +198,90 @@ public class CourseService implements CourseIService {
         courseRepository.save(course);
     }
 
+    @Override
+    public ResponseEntity<Map<String, Long>> getStatisticsCourses() {
+        Map<String, Long> statistics = new HashMap<>();
+        statistics.put("totalCourses", countCourses());
+        statistics.put("publishedCourses", countPublishedCourses());
+        statistics.put("unpublishedCourses", countUnpublishedCourses());
+        statistics.put("totalEarning", (long) countTotalEarning());
+        statistics.put("coursesToday", countCoursesToday());
+        statistics.put("publishedCoursesToday", countcountPublishedCoursesToday());
+        statistics.put("nonPublishedCoursesToday", countNonPublishedCoursesToday());
+        statistics.put("earningsFromCoursesToday", (long) countEarningsFromCoursesToday());
+        return ResponseEntity.ok(statistics);
+    }
 
+    @Override
+    public ResponseEntity<Map<String, Long>> getStatisticsCoursesInstructor() {
+        User instructor = sessionService.getUserBySession().get();
+        Map<String, Long> statistics = new HashMap<>();
+        statistics.put("totalCourses", countCoursesByInstructor(instructor.getIdUser()));
+        statistics.put("publishedCourses", countPublishedCoursesByInstructor(instructor.getIdUser()));
+        statistics.put("unpublishedCourses", countNonPublishedCoursesByInstructor(instructor.getIdUser()));
+        statistics.put("totalEarning", (long) findEarningsFromCoursesByInstructor(instructor.getIdUser()));
+        statistics.put("coursesToday", countCoursesByInstructorToday(instructor.getIdUser()));
+        statistics.put("publishedCoursesToday", countPublishedCoursesByInstructorToday(instructor.getIdUser()));
+        statistics.put("nonPublishedCoursesToday", countNonPublishedCoursesByInstructorToday(instructor.getIdUser()));
+        statistics.put("earningsFromCoursesToday", (long) findEarningsFromCoursesByInstructorToday(instructor.getIdUser()));
+        return ResponseEntity.ok(statistics);
+    }
+    long countCoursesByInstructorToday(Long instructorId) {
+        return courseRepository.countCoursesByInstructorToday(instructorId, Instant.now());
+    }
+
+    long countPublishedCoursesByInstructorToday(Long instructorId) {
+        return courseRepository.countPublishedCoursesByInstructorToday(instructorId, Instant.now());
+    }
+
+    long countNonPublishedCoursesByInstructorToday(Long instructorId) {
+        return courseRepository.countNonPublishedCoursesByInstructorToday(instructorId, Instant.now());
+    }
+
+    double findEarningsFromCoursesByInstructorToday(Long instructorId) {
+        return courseRepository.findEarningsFromCoursesByInstructorToday(instructorId, Instant.now()).orElse(0.0);
+    }
+    long countCoursesByInstructor(Long instructorId) {
+        return courseRepository.countCoursesByInstructor(instructorId);
+    }
+
+    long countPublishedCoursesByInstructor(Long instructorId) {
+        return courseRepository.countPublishedCoursesByInstructor(instructorId);
+    }
+
+    long countNonPublishedCoursesByInstructor(Long instructorId) {
+        return courseRepository.countNonPublishedCoursesByInstructor(instructorId);
+    }
+    double findEarningsFromCoursesByInstructor(Long instructorId) {
+        return courseRepository.findEarningsFromCoursesByInstructor(instructorId).orElse(0.0);
+    }
+
+    long countCoursesToday() {
+        return courseRepository.countCoursesToday(Instant.now());
+    }
+    long countcountPublishedCoursesToday() {
+        return courseRepository.countPublishedCoursesToday(Instant.now());
+    }
+    long countNonPublishedCoursesToday() {
+        return courseRepository.countNonPublishedCoursesToday(Instant.now());
+    }
+    double countEarningsFromCoursesToday() {
+        return courseRepository.findEarningsFromCoursesToday(Instant.now()).orElse(0.0);
+    }
+
+    long countCourses() {
+        return courseRepository.count();
+    }
+    long countPublishedCourses() {
+        return courseRepository.findAllPublishedCourses();
+    }
+    long countUnpublishedCourses() {
+        return courseRepository.findAllDraftCourses();
+    }
+
+    double countTotalEarning(){
+        return courseRepository.findAllEarningsFromCourses().orElse(0.0);
+    }
     @Override
     public Course uploadThumbnail(Long courseId, MultipartFile thumbnail) {
         try {
@@ -152,6 +309,12 @@ public class CourseService implements CourseIService {
     @Override
     public ResponseModel<Course> getAllCourses(Pageable pageable) {
         Page<Course> courseList=courseRepository.findAll(pageable);
+        return buildResponse(courseList);
+    }
+
+    @Override
+    public ResponseModel<Course> getPublishedCourses(Pageable pageable) {
+        Page<Course> courseList=courseRepository.findPublishAll(pageable);
         return buildResponse(courseList);
     }
 

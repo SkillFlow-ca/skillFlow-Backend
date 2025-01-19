@@ -1,5 +1,6 @@
 package com.skillflow.skillflowbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.skillflow.skillflowbackend.model.enume.StatusPanier;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,8 +28,8 @@ public class Panier {
     private StatusPanier statusPanier; // Enum: PENDING, PAID, FAILED
 
 
-
-    @OneToOne
+    @JsonIgnore
+    @OneToOne(mappedBy = "panier")
     private PaymentSkillFlow paymentSkillFlow;
     @ManyToOne
     private User user;

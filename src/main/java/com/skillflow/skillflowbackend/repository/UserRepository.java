@@ -22,4 +22,18 @@ public interface UserRepository extends CrudRepository<User,Long> {
     Page<User> findActiveUsers(Pageable pageable);
     @Query("select u from User u ")
     Page<User> findUsers(Pageable pageable);
+
+    @Query("select distinct count(u) from User u where u.isValidated=true")
+    public long countActiveUsers();
+    @Query("select distinct count(u) from User u where u.isValidated=true and u.roleTypes='USER'")
+    public long countClient();
+    @Query("select distinct count(u) from User u where u.isValidated=true and u.roleTypes='INSTRUCTOR'")
+    public long countInstructor();
+
+    @Query("select distinct count(u) from User u ")
+    public long countAllUsers();
+
+    @Query("select distinct u from User u,Course c where u.idUser=c.admin.idUser and c.idCourse=:v1")
+    public User findUserByCourseId(@Param("v1") Long courseId);
+
 }

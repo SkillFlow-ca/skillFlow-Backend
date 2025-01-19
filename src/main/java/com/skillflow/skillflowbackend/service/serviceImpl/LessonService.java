@@ -92,6 +92,12 @@ public class LessonService implements LessonIService {
         }
     }
 
+    @Override
+    public void deleteLesson(Long idLesson) {
+        lessonRepository.delete(lessonRepository.findById(idLesson)
+                .orElseThrow(() -> new RuntimeException("Lesson not found with ID: " + idLesson)));
+    }
+
 
     public Lesson getLesson() {
         System.out.println("Fetching lesson with ID: 30");

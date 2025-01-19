@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -196,6 +197,34 @@ public class UserService implements UserIService {
         User user=userRepository.findById(id).orElseThrow(()->new UserServiceCustomException("No user found with this id: "+id,"USER_NOT_FOUND"));
         user.setIsDeleted(true);
         userRepository.save(user);
+    }
+
+    @Override
+    public ResponseEntity<Map<String, Long>> getStatisticsUsers() {
+        Map<String, Long> statistics = new HashMap<>();
+        statistics.put("totalUsers", countAllUsers());
+        statistics.put("validatedUsers", countValidatedUsers());
+        statistics.put("instructors", countInstructor());
+        statistics.put("clients", countClient());
+        return ResponseEntity.ok(statistics);
+    }
+
+    @Override
+    public User findUserByCourseId(Long courseId) {
+        return userRepository.findUserByCourseId(courseId);
+    }
+
+    public Long countValidatedUsers(){
+        return userRepository.countActiveUsers();
+    }
+    public Long countInstructor(){
+        return userRepository.countInstructor();
+    }
+    public Long countClient(){
+        return userRepository.countClient();
+    }
+    public Long countAllUsers(){
+        return userRepository.countAllUsers();
     }
 
     private boolean isTokenExpired(final LocalDateTime tokenCreationDate) {

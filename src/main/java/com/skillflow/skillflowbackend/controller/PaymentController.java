@@ -2,10 +2,15 @@ package com.skillflow.skillflowbackend.controller;
 
 import com.paypal.api.payments.Links;
 import com.paypal.base.rest.PayPalRESTException;
+import com.skillflow.skillflowbackend.dto.ResponseModel;
+import com.skillflow.skillflowbackend.model.Blog;
 import com.skillflow.skillflowbackend.model.PaymentSkillFlow;
+import com.skillflow.skillflowbackend.model.enume.StatusBlog;
 import com.skillflow.skillflowbackend.service.PaymentIService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -44,5 +49,12 @@ public class PaymentController {
                     .body("Error confirming payment: " + e.getMessage());
         }
     }
-
+    @GetMapping("/get-payments")
+    public ResponseModel<PaymentSkillFlow> getPaymentsForAdmin(
+                                                                   @RequestParam(required = false,defaultValue="1")int pageNo,
+                                                                   @RequestParam(required = false,defaultValue="10")int size) {
+        Pageable pageRequestData = PageRequest.of(pageNo - 1, size);
+        ResponseModel<PaymentSkillFlow> payments = paymentService.getPaymentsForAdmin(pageRequestData);
+        return payments;
+    }
 }

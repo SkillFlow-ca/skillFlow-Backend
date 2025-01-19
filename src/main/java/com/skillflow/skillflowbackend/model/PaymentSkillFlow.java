@@ -26,6 +26,6 @@ public class PaymentSkillFlow {
     private String transactionId;
     private Instant createdAt;
     private Instant updatedAt;
-    @OneToOne(mappedBy = "paymentSkillFlow")
+    @OneToOne
     private Panier panier;
 }

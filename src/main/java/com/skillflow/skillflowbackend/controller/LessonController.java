@@ -47,4 +47,8 @@ public class LessonController {
     public Lesson getLesson() {
         return lessonRepository.findById(30L).get();
     }
+    @DeleteMapping("delete")
+    public void deleteLesson(@RequestParam("lessonId") Long lessonId) {
+        lessonIService.deleteLesson(lessonId);
+    }
 }

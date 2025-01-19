@@ -11,4 +11,5 @@ public interface LessonIService {
     public List<Lesson> updateLessonToAddVideoFile(Map<String, MultipartFile> fileLessons) ;
 
     public void updateLessonToAddVideoFileAsync(Map<String, MultipartFile> fileLessons);
+    public void deleteLesson(Long idLesson);
 }

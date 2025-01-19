@@ -4,10 +4,8 @@ import com.paypal.api.payments.*;
 import com.paypal.base.rest.APIContext;
 import com.paypal.base.rest.PayPalRESTException;
 import com.skillflow.skillflowbackend.config.PaypalConstants;
-import com.skillflow.skillflowbackend.model.Course;
-import com.skillflow.skillflowbackend.model.Enrollment;
-import com.skillflow.skillflowbackend.model.Panier;
-import com.skillflow.skillflowbackend.model.PaymentSkillFlow;
+import com.skillflow.skillflowbackend.dto.ResponseModel;
+import com.skillflow.skillflowbackend.model.*;
 import com.skillflow.skillflowbackend.model.enume.PaymentStatus;
 import com.skillflow.skillflowbackend.model.enume.StatusENR;
 import com.skillflow.skillflowbackend.model.enume.StatusPanier;
@@ -17,12 +15,15 @@ import com.skillflow.skillflowbackend.repository.PaymentRepository;
 import com.skillflow.skillflowbackend.service.PaymentIService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -143,6 +144,26 @@ public class PaymentService implements PaymentIService {
         } else {
             throw new RuntimeException("Payment not approved");
         }
+    }
+
+    @Override
+    public ResponseModel<PaymentSkillFlow> getPaymentsForAdmin(Pageable pageable) {
+        Page<PaymentSkillFlow> payment = paymentRepository.findAllPayments(pageable);
+        return buildResponse(payment);
+    }
+
+    private ResponseModel<PaymentSkillFlow> buildResponse(Page<PaymentSkillFlow> payment) {
+        List<PaymentSkillFlow> listPayment = payment.toList()
+                .stream()
+                .collect(Collectors.toList());
+        return ResponseModel.<PaymentSkillFlow>builder()
+                .pageNo(payment.getNumber())
+                .pageSize(payment.getSize())
+                .totalElements(payment.getTotalElements())
+                .totalPages(payment.getTotalPages())
+                .data(listPayment)
+                .isLastPage(payment.isLast())
+                .build();
     }
 
 }
