@@ -29,6 +29,8 @@ public class Blog {
     private String tags;
     private Instant createdAt;
     private Instant updatedAt;
+    private boolean inLandingPage;
+
     private Boolean isDeleted;
     @Enumerated(EnumType.STRING)
     private StatusBlog statusBlog; // Enum: APPROVED, PENDING, REFUSED

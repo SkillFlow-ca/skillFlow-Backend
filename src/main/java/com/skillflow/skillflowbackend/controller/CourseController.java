@@ -99,4 +99,12 @@ public class CourseController {
     public ResponseEntity<Map<String, Long>> getStatisticsCoursesInstructor() {
         return courseIService.getStatisticsCoursesInstructor();
     }
+    @PutMapping("updateInLandingPage")
+    public void updateInLandingPage(@RequestParam Long courseId, @RequestParam boolean inLandingPage) {
+        courseIService.updateInLandingPage(courseId, inLandingPage);
+    }
+    @GetMapping("getCoursesForLandingPage")
+    public List<Course> getCoursesForLandingPage() {
+        return courseIService.getCoursesForLandingPage();
+    }
 }

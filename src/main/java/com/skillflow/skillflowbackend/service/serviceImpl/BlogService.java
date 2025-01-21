@@ -138,6 +138,30 @@ public class BlogService implements BlogIService {
         blogRepository.save(blog);
     }
 
+    @Override
+    public List<Blog> getBlogToLandingPage() {
+        return blogRepository.findBlogToLandingPage();
+    }
+
+    @Override
+    public void updateBlogInLandingPage(long idBlog, boolean inLandingPage) {
+        Blog blog= blogRepository.findById(idBlog).get();
+        if (inLandingPage=true) {
+            long count = blogRepository.findBlogToLandingPage().size();
+            if (count >= 2) {
+                throw new RuntimeException("Only Two Blog can be in the landing page at a time.");
+            }
+            else{
+                blog.setInLandingPage(inLandingPage);
+                blogRepository.save(blog);
+            }
+        }
+        else {
+            blog.setInLandingPage(inLandingPage);
+            blogRepository.save(blog);
+        }
+    }
+
 
     private byte[] getImageAboutBlog(String prompt){
         try {

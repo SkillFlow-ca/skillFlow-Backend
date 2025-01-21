@@ -52,4 +52,12 @@ public class BlogController {
     public Blog changeStatusOfBlog(@RequestParam long idBlog,@RequestParam StatusBlog statusBlog) {
         return blogIService.changeStatusOfBlog(idBlog, statusBlog);
     }
+    @PutMapping("updateInLandingPage")
+    public void updateBlogInLandingPage(@RequestParam long idBlog,@RequestParam boolean inLandingPage) {
+        blogIService.updateBlogInLandingPage(idBlog, inLandingPage);
+    }
+    @GetMapping("getBlogToLandingPage")
+    public List<Blog> getBlogToLandingPage() {
+        return blogIService.getBlogToLandingPage();
+    }
     }

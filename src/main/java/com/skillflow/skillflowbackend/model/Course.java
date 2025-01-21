@@ -44,6 +44,7 @@ public class Course implements Serializable {
     private int totalReview;
     private double rating;
     private boolean isBestSeller;
+    private boolean inLandingPage;
 
     private boolean free;
     private double regularPrice;

@@ -68,6 +68,8 @@ public class AuthConfig {
                                 "/api/v1/answer/getAnswersByQuestionId",
                                 "/api/v1/course/getAllCourses",
                                 "/api/v1/course/GetCourse",
+                                "/api/v1/blog/getBlogToLandingPage",
+                                "/api/v1/course/getCoursesForLandingPage",
                                 "/api/v1/course/getPublishedCourses",
                                 "/api/v1/contact/save",
                                 "/api/v1/auth/findUserByCourseId",

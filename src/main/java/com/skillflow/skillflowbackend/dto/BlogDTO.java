@@ -23,6 +23,8 @@ public class BlogDTO {
     private String content;
     private Date createdAt;
     private Date updatedAt;
+    private boolean inLandingPage;
+
     @Enumerated(EnumType.STRING)
     private StatusBlog statusBlog; // Enum: APPROVED, PENDING, REFUSED
     private boolean isAiGenerated;

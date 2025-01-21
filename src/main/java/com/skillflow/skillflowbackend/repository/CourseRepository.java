@@ -65,6 +65,11 @@ public interface CourseRepository extends CrudRepository<Course, Long> {
     @Query("SELECT distinct SUM(c.discountPrice) FROM Course c JOIN Enrollment e ON c.idCourse = e.course.idCourse WHERE c.admin.idUser = :instructorId AND c.isDeleted = false and c.free = false")
     Optional<Double> findEarningsFromCoursesByInstructor(@Param("instructorId") Long instructorId);
 
+    @Query("SELECT distinct COUNT(c) FROM Course c WHERE c.isDeleted = false and  c.inLandingPage=true ")
+    long countCoursesInLandingPage();
+
+    @Query("SELECT distinct c FROM Course c WHERE c.isDeleted = false and c.inLandingPage=true")
+    List<Course> findCoursesInLandingPage();
 
 
 }

@@ -199,6 +199,31 @@ public class CourseService implements CourseIService {
     }
 
     @Override
+    public void updateInLandingPage(Long courseId, boolean inLandingPage) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course not found with id: " + courseId));
+        if(inLandingPage==true){
+            long count = courseRepository.countCoursesInLandingPage();
+            if (count >= 3) {
+                throw new RuntimeException("Only three courses can be in the landing page at a time.");
+            }
+            else{
+                course.setInLandingPage(inLandingPage);
+                courseRepository.save(course);
+            }
+        }
+        else {
+            course.setInLandingPage(inLandingPage);
+            courseRepository.save(course);
+        }
+    }
+
+    @Override
+    public List<Course> getCoursesForLandingPage() {
+        return courseRepository.findCoursesInLandingPage();
+    }
+
+    @Override
     public ResponseEntity<Map<String, Long>> getStatisticsCourses() {
         Map<String, Long> statistics = new HashMap<>();
         statistics.put("totalCourses", countCourses());

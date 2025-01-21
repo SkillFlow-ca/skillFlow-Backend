@@ -21,5 +21,8 @@ public interface BlogIService {
 
     public void deleteBlog(long id);
 
+    public List<Blog> getBlogToLandingPage();
+    public void updateBlogInLandingPage(long idBlog, boolean inLandingPage);
+
 
 }

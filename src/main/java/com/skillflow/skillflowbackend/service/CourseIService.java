@@ -17,6 +17,8 @@ public interface CourseIService {
    public Course uploadCourseVideo(Long courseId, MultipartFile videoFile) ;
    public void uploadCourseVideoAsync(Long courseId, MultipartFile videoFile);
    public void updateStatusOfCourse(Long courseId, String status);
+   public void updateInLandingPage(Long courseId, boolean inLandingPage);
+   public List<Course> getCoursesForLandingPage();
 
    public ResponseEntity<Map<String, Long>> getStatisticsCourses();
    public ResponseEntity<Map<String, Long>> getStatisticsCoursesInstructor();

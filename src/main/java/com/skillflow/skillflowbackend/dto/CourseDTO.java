@@ -49,6 +49,8 @@ public class CourseDTO {
     private int totalReview;
     private double rating;
     private boolean isBestSeller;
+    private boolean inLandingPage;
+
 
     private boolean free;
     private double regularPrice;
