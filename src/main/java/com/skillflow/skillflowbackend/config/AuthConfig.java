@@ -74,7 +74,7 @@ public class AuthConfig {
                                 "/api/v1/contact/save",
                                 "/api/v1/auth/findUserByCourseId",
                                 "/api/v1/courseCategory/getAllNotDeleted",
-                                "/user-service/v3/api-docs/**", "/actuator/health")
+                                "/user-service/v3/api-docs/**", "/actuator/**")
                         .permitAll().anyRequest()
                         .authenticated())
                 .sessionManagement((session) -> session
@@ -82,7 +82,10 @@ public class AuthConfig {
         // To swagger authorization
         http.cors(cors -> cors.configurationSource(request -> {
             CorsConfiguration configuration = new CorsConfiguration();
-            configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200","http://myawsskillfront.s3-website.ca-central-1.amazonaws.com")); // Specify the frontend origin
+            configuration.setAllowedOrigins(Arrays.asList(
+                    "https://myskillflow.com", // Add secure version
+                    "http://localhost:4200"
+            ));
             configuration.setAllowedMethods(Arrays.asList("*"));
             configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
             configuration.setAllowCredentials(true);

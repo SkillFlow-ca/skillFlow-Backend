@@ -15,6 +15,7 @@ import com.skillflow.skillflowbackend.repository.PaymentRepository;
 import com.skillflow.skillflowbackend.service.PaymentIService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,11 @@ public class PaymentService implements PaymentIService {
     @Autowired
     private EnrollmentRepository enrollmentRepository;
 
+    @Value("${paypalUrl.cancel-url}")
+    private String cancelUrl;
+
+    @Value("${paypalUrl.success-url}")
+    private String successUrl;
 
 
     public Payment createPayment(Double total,String currency, String method, String intent, String description, String cancelUrl, String successUrl, String invoiceNumber) throws PayPalRESTException {
@@ -84,7 +90,7 @@ public class PaymentService implements PaymentIService {
         // Create a payment but do NOT save anything to the database yet
         Payment payment = createPayment(panier.getTotalAmount(), "USD", "paypal",
                 "sale", "Payment for courses",
-                PaypalConstants.CANCEL_URL, PaypalConstants.SUCCESS_URL, invoiceNumber);
+                cancelUrl, successUrl, invoiceNumber);
 
         // Return the approval URL to redirect the user
         for (Links link : payment.getLinks()) {

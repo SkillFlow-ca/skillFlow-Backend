@@ -1,15 +1,15 @@
 server:
-  port: 8085
+  port: 5000
 spring:
   servlet:
     multipart:
-      max-file-size: 150MB       # Maximum size of a single uploaded file
-      max-request-size: 150MB
+      max-file-size: 800MB       # Maximum size of a single uploaded file
+      max-request-size: 800MB
       enabled: true
   datasource:
-    url: jdbc:mysql://localhost:3306/skillFlowDataBase?maxAllowedPacket=16777216
-    username: root
-    password:
+    url: jdbc:mysql://skillflowdatabase.ctok44424bfy.ca-central-1.rds.amazonaws.com:3306/skillFlowDataBase?maxAllowedPacket=16777216
+    username: myskillflow
+    password: myskillflow123
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -17,8 +17,6 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
-  profiles:
-    active: prod
   ai:
     openai:
       api-key: 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
@@ -61,8 +59,8 @@ paypal:
   mode: sandbox #Use sandbox for testing or live for production
 
 paypalUrl:
-  cancel-url: http://localhost:4200/home
-  success-url: http://localhost:4200/payment-success
+  cancel-url: https://myskillflow/home
+  success-url: https://myskillflow/payment-success
 
 management:
   endpoints:
