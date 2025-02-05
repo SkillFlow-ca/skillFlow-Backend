@@ -1,6 +1,18 @@
 server:
   port: 5000
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html  # Do NOT include "/myskillflow" here
 spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 101307913397-esto5rnr124rs7olfelba8ami7p8p2ij.apps.googleusercontent.com
+            client-secret: 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
   servlet:
     multipart:
       max-file-size: 800MB       # Maximum size of a single uploaded file

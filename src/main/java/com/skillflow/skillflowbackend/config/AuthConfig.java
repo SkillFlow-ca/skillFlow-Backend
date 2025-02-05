@@ -11,9 +11,13 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -48,7 +52,9 @@ public class AuthConfig {
                                 "/api/v1/auth/user/register",
                                 "/api/v1/auth/admin/register",
                                 "/api/v1/auth/logout",
+                                "/api/v1/auth/deleteUser",
                                 "/api/v1/auth/getUsers",
+                                "/api/v1/auth/loginGoogle",
                                 "/api/v1/auth/resetPassword/**",
                                 "/api/v1/auth/token",
                                 "/api/v1/auth/forgotPassword",
@@ -74,9 +80,11 @@ public class AuthConfig {
                                 "/api/v1/contact/save",
                                 "/api/v1/auth/findUserByCourseId",
                                 "/api/v1/courseCategory/getAllNotDeleted",
-                                "/user-service/v3/api-docs/**", "/actuator/**")
+                                "/swagger-ui.html", "/swagger-ui/**",
+                                "/api-docs/**", "/actuator/**")
                         .permitAll().anyRequest()
                         .authenticated())
+
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         // To swagger authorization
@@ -107,5 +115,7 @@ public class AuthConfig {
         authenticationProvider.setPasswordEncoder(passwordEncoder());
         return authenticationProvider;
     }
+
+
 
 }

@@ -20,7 +20,7 @@ public interface UserRepository extends CrudRepository<User,Long> {
     User findByTokenToForgotPassword(Long tokenToForgotPassword);
     @Query("select u from User u where u.isValidated=true")
     Page<User> findActiveUsers(Pageable pageable);
-    @Query("select u from User u ")
+    @Query("select u from User u where u.isDeleted=false")
     Page<User> findUsers(Pageable pageable);
 
     @Query("select distinct count(u) from User u where u.isValidated=true")
