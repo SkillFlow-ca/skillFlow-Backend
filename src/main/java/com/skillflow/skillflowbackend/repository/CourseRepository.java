@@ -70,6 +70,8 @@ public interface CourseRepository extends CrudRepository<Course, Long> {
 
     @Query("SELECT distinct c FROM Course c WHERE c.isDeleted = false and c.inLandingPage=true")
     List<Course> findCoursesInLandingPage();
+    @Query("SELECT distinct c FROM Course c,Module m,Lesson l WHERE l.idLesson=:idLesson and l.module.idModule=m.idModule and m.course.idCourse=c.idCourse")
+    public Course findCourseByLesson(long idLesson);
 
 
 }

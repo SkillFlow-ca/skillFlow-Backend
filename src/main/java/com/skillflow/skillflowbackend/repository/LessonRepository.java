@@ -15,4 +15,8 @@ public interface LessonRepository extends CrudRepository<Lesson, Long> {
     Lesson findByReference(@Param("reference") String reference);
 
     public List<Lesson> findLessonByModule_IdModule(Long moduleId);
+
+
+    @Query("SELECT COUNT(l) FROM Lesson l WHERE l.module.course.idCourse = :courseId")
+    long countAllLessonsInCourse(@Param("courseId") Long courseId);
 }

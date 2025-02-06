@@ -148,10 +148,12 @@ public class CourseService implements CourseIService {
                     lesson.setContent(lessonDTO.getContent());
                     lesson.setUrlvideoLesson(null);
                     lesson.setTypeLesson(TypeLesson.MARKDOWN);
+                    lesson.setDuration("150");
                 } else if (lessonDTO.getTypeLesson().equals(TypeLesson.PDF)){
                     lesson.setTitlePdf(lessonDTO.getTitlePdf());
                     lesson.setUrlvideoLesson(null);
                     lesson.setTypeLesson(TypeLesson.PDF);
+                    lesson.setDuration("150");
                 }
                 else {
                     lesson.setTitleVideo(lessonDTO.getTitleVideo());
@@ -353,6 +355,7 @@ public class CourseService implements CourseIService {
 
     @Override
     public Course getCourse(Long courseId) {
+
         return courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found with id: " + courseId));
     }

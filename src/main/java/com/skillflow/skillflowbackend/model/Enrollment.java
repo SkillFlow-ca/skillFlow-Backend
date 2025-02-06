@@ -22,7 +22,7 @@ public class Enrollment {
 
     private Instant enrollmentDate;
     private StatusENR statusEnr; // Enum: PENDING, ACTIVE, COMPLETED
-    private float progress;
+    private double progress;
     private Instant createdAt;
     private Instant updatedAt;
     @JsonIgnore

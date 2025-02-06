@@ -17,4 +17,7 @@ public interface EnrollmentRepository extends CrudRepository<Enrollment, Long> {
 
     @Query("SELECT distinct COUNT (e) FROM Enrollment e WHERE e.course.idCourse = :courseId")
     public int countEnrollmentsByCourseId(@Param("courseId") Long courseId);
+
+    @Query ("SELECT e FROM Enrollment e,Course c,User u WHERE e.course.idCourse = :courseId and e.user.idUser = :userId")
+    public Enrollment getEnrollmentByCourseAndUser(@Param("courseId") Long courseId, @Param("userId") Long userId);
 }

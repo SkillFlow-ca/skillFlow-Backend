@@ -39,6 +39,7 @@ public class EnrollmentService implements EnrollmentIService {
         enrollment.setUser(user);
         enrollment.setStatusEnr(StatusENR.ACTIVE);
         enrollment.setEnrollmentDate(Instant.now());
+        enrollment.setProgress(0);
         enrollment.setCreatedAt(Instant.now());
         for (Course c: courseList) {
             enrollment.setCourse(c);
