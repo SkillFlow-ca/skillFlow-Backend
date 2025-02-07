@@ -1,4 +1,5 @@
 package com.skillflow.skillflowbackend.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,9 +17,11 @@ public class StudentLessonProgress {
     private long idStudentLessonProgress;
     private boolean completed;
     private String notes;
-    private float progress;
+    private double progressPercentage;
+    @JsonIgnore
     @ManyToOne
     private User user;
+    @JsonIgnore
     @OneToOne
     private Lesson lesson;
 }

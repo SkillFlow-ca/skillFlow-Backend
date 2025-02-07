@@ -43,9 +43,7 @@ public class User {
     @OneToMany(mappedBy = "admin")
     private List<Blog> blogList;
 
-    @OneToMany(mappedBy = "user")
-    private List<Payment> paymentList;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "admin")
     private List<Course> courseList;
 
@@ -68,5 +66,8 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Job> jobList;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Panier> panierList;
 
 }

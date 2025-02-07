@@ -35,43 +35,41 @@ public class JobScrapingService implements JobScrapingIService {
     @Autowired
     private JobScrapingRepository historyRepository;
 
-    private static final List<String> KEYWORDS = Arrays.asList("DevOps", "Kubernetes", "Cloud", "IA", "Machine Learning", "Artificial Intelligence", "System Administration", "Network Administration");
+    private static final List<String> KEYWORDS = Arrays.asList("DevOps", "Kubernetes", "Cloud", "IA","Software Developer", "Machine Learning", "Artificial Intelligence", "System Administration", "Network Administration");
     @Scheduled(cron = "0 0 0 * * ?") // Runs at midnight every day
     public List<Job> scrapeJobs() {
         List<Job> scrapedJobs = new ArrayList<>();
         String baseUrl = "https://www.jobbank.gc.ca/jobsearch/jobsearch?searchstring=";
-
         for (String keyword : KEYWORDS) {
             String url = baseUrl + keyword + "&locationstring=&locationparam=";
             try {
                 // Fetch the HTML content
                 Document document = Jsoup.connect(url).get();
-
                 // Select job elements
                 Elements jobElements = document.select("article.action-buttons");
-
                 for (Element jobElement : jobElements) {
                     String title = jobElement.select("span.noctitle").text();
+                    System.out.println(title);
                     String company = jobElement.select("li.business").text();
+                    System.out.println(company);
                     String location = jobElement.select("li.location").text();
                     String salary = jobElement.select("li.salary").text();
-                    String jobUrl = jobElement.select("a.resultJobItem").attr("href");
                     String type = jobElement.select("span.telework").text();
                     String id = jobElement.attr("id");
                     String number = id.replaceAll("\\D+", "");
+                    String jobUrl = jobElement.select("a.resultJobItem").attr("href");
                     if (!jobRepository.existsByTitleAndCompanyName(title, company)) {
                         // Create a Job entity
                         Job job = new Job();
                         job.setTitle(title);
                         job.setCompanyName(company);
                         job.setLocation(location);
-                        job.setSalary(null);
+                        job.setSalary(salary);
                         job.setSourceJob(SourceJob.SCRAPED);
                         job.setJobUrl("https://www.jobbank.gc.ca/jobsearch/jobposting/"+number);
                         job.setCreatedAt(Instant.now());
                         job.setScrapedUrl(url);
-                        job.setKeyword(null);
-                        job.setCountry("Canada");
+                        job.setKeyword(keyword);
                         job.setIsDeleted(false);
                         if (type.contains("Telework")) {
                             job.setType(JobType.REMOTE);
@@ -85,7 +83,6 @@ public class JobScrapingService implements JobScrapingIService {
                         // Save to database
                         Job savedJob = jobRepository.save(job);
                         scrapedJobs.add(savedJob);
-
                         // Log scraping success
                         saveScrapingHistory(savedJob, url, "COMPLETED", null);
                     }

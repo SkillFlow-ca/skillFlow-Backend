@@ -1,6 +1,26 @@
 server:
   port: 8085
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html  # Do NOT include "/myskillflow" here
+
 spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 101307913397-esto5rnr124rs7olfelba8ami7p8p2ij.apps.googleusercontent.com
+            client-secret: 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
+
+
+  servlet:
+    multipart:
+      max-file-size: 150MB       # Maximum size of a single uploaded file
+      max-request-size: 150MB
+      enabled: true
   datasource:
     url: jdbc:mysql://localhost:3306/skillFlowDataBase?maxAllowedPacket=16777216
     username: root
@@ -12,9 +32,11 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+  #profiles:
+   #active: prod
   ai:
     openai:
-      api-key: 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
+      api-key: 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
   mail:
     host: smtp.gmail.com
     port: 587
@@ -40,3 +62,36 @@ retry:
   config:
     maxAttempts: 3
     backoffDelay: 3000
+
+aws:
+  s3:
+    bucket: course-videos-skillflow
+    access-key: AKIA23WHTY2SJJ3MSWUR
+    secret-key: 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
+    region: ca-central-1
+
+paypal:
+  clientId: AXMgZa6adLakjC3LFnS8VN8s9W9paSyLgm7fWXNgXdIM57Z34iNXb5qxP9SzZL1weUO2IKCeXJmG-4Kg
+  clientSecret: EGMrcWwoaSXKBVptu-moMCp8sEVgikm39WfIC_9AEsCjeLhT2w16yvXmfIGclLovKJwd48GJ7prJo0yo
+  mode: sandbox #Use sandbox for testing or live for production
+
+paypalUrl:
+  cancel-url: http://localhost:4200/home
+  success-url: http://localhost:4200/payment-success
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      enabled: true
+  health:
+    db:
+      enabled: true
+  info:
+    git:
+      mode: full

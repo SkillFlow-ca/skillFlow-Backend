@@ -1,8 +1,10 @@
 package com.skillflow.skillflowbackend.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.skillflow.skillflowbackend.model.enume.StatusENR;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.Instant;
 import java.util.Date;
 
 @Setter
@@ -18,14 +20,14 @@ public class Enrollment {
     @Id
     private long idEnrollment;
 
-    private Date enrollmentDate;
+    private Instant enrollmentDate;
     private StatusENR statusEnr; // Enum: PENDING, ACTIVE, COMPLETED
-    private float progress;
-    private Date createdAt;
-    private Date updatedAt;
-
+    private double progress;
+    private Instant createdAt;
+    private Instant updatedAt;
+    @JsonIgnore
     @ManyToOne
     private User user;
-    @OneToOne
+    @ManyToOne
     private Course course;
 }

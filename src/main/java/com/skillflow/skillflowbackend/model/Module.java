@@ -1,7 +1,9 @@
 package com.skillflow.skillflowbackend.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.Instant;
 import java.util.List;
 
 @Setter
@@ -17,8 +19,9 @@ public class Module {
     @Id
     private long idModule;
     private String name;
-    private String description;
-
+    private Instant createdAt;
+    private Instant updatedAt;
+    @JsonIgnore
     @ManyToOne
     private Course course;
     @OneToMany(mappedBy = "module")

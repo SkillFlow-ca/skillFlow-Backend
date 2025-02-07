@@ -1,0 +1,92 @@
+server:
+  port: 5000
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html  # Do NOT include "/myskillflow" here
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 101307913397-esto5rnr124rs7olfelba8ami7p8p2ij.apps.googleusercontent.com
+            client-secret: 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
+  servlet:
+    multipart:
+      max-file-size: 800MB       # Maximum size of a single uploaded file
+      max-request-size: 800MB
+      enabled: true
+  datasource:
+    url: jdbc:mysql://skillflowdatabase.ctok44424bfy.ca-central-1.rds.amazonaws.com:3306/skillFlowDataBase?maxAllowedPacket=16777216
+    username: myskillflow
+    password: myskillflow123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  ai:
+    openai:
+      api-key: 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
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: workbottn@gmail.com
+    password: cufzgbpnihwgbllr
+    properties:
+      mail:
+        smtp:
+          auth: true
+        starttls:
+          enable: true
+token:
+  secret:
+    key: 81456854c2075418d28e0d3d17b30ad5e53a7b9fd6a86ba1202522bc23b9be7a730693ca383d51f9c166bb67f60706599809d4d0e0abea6dbc6538659827daf4e8299e1d7fa0178e76b47eb914413ae81e8b3f82c663edf3fc86dddd04af032eaa1b26925d51a2b9172567ca172ce8770dd64ad0d9654ee32ff8754c2ebb3781
+    embedding:
+      options:
+        model: text-embedding-3-small
+super:
+  user:
+    mail: mohsen.fennira@esprit.tn
+
+retry:
+  config:
+    maxAttempts: 3
+    backoffDelay: 3000
+
+aws:
+  s3:
+    bucket: course-videos-skillflow
+    access-key: AKIA23WHTY2SJJ3MSWUR
+    secret-key: 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
+    region: ca-central-1
+
+paypal:
+  clientId: AXMgZa6adLakjC3LFnS8VN8s9W9paSyLgm7fWXNgXdIM57Z34iNXb5qxP9SzZL1weUO2IKCeXJmG-4Kg
+  clientSecret: EGMrcWwoaSXKBVptu-moMCp8sEVgikm39WfIC_9AEsCjeLhT2w16yvXmfIGclLovKJwd48GJ7prJo0yo
+  mode: sandbox #Use sandbox for testing or live for production
+
+paypalUrl:
+  cancel-url: https://myskillflow/home
+  success-url: https://myskillflow/payment-success
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      enabled: true
+  health:
+    db:
+      enabled: true
+  info:
+    git:
+      mode: full
